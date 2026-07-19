@@ -35,9 +35,7 @@ void main() {
   testWidgets('FarmerDetailsScreen shows farmer details', (tester) async {
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-          farmerProvider('1').overrideWith((ref) => testFarmer),
-        ],
+        overrides: [farmerProvider('1').overrideWith((ref) => testFarmer)],
         child: MaterialApp(
           localizationsDelegates: const [
             AppLocalizations.delegate,
@@ -64,10 +62,10 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          farmerProvider('1').overrideWith((ref) => Future.delayed(
-            const Duration(seconds: 1),
-            () => testFarmer,
-          )),
+          farmerProvider('1').overrideWith(
+            (ref) =>
+                Future.delayed(const Duration(seconds: 1), () => testFarmer),
+          ),
         ],
         child: MaterialApp(
           localizationsDelegates: const [
@@ -84,7 +82,7 @@ void main() {
 
     // Initial data is shown from the passed 'farmer' object
     expect(find.text('أحمد'), findsOneWidget);
-    
+
     // Clear the pending timer
     await tester.pump(const Duration(seconds: 1));
   });
@@ -93,7 +91,9 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          farmerProvider('1').overrideWith((ref) => throw Exception('Failed to load')),
+          farmerProvider(
+            '1',
+          ).overrideWith((ref) => throw Exception('Failed to load')),
         ],
         child: MaterialApp(
           localizationsDelegates: const [

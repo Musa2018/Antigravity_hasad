@@ -141,7 +141,9 @@ void main() {
       rowVersion: '',
     );
 
-    await db.into(db.farmers).insert(
+    await db
+        .into(db.farmers)
+        .insert(
           FarmersCompanion.insert(
             id: localId,
             idTypeId: const Value(1),

@@ -24,7 +24,7 @@ class _FarmerSearchScreenState extends ConsumerState<FarmerSearchScreen> {
 
   void _onSearch() async {
     if (!_formKey.currentState!.validate()) return;
-    
+
     final idNumber = _controller.text.trim();
     await ref.read(farmerSearchProvider.notifier).search(idNumber);
 
@@ -32,7 +32,10 @@ class _FarmerSearchScreenState extends ConsumerState<FarmerSearchScreen> {
 
     final state = ref.read(farmerSearchProvider);
     if (state.status == FarmerSearchStatus.found && state.farmer != null) {
-      context.push(AppRoutes.editFarmer, extra: state.farmer); // Placeholder for details
+      context.push(
+        AppRoutes.editFarmer,
+        extra: state.farmer,
+      ); // Placeholder for details
     } else if (state.status == FarmerSearchStatus.notFound) {
       context.push(AppRoutes.addFarmer, extra: idNumber);
     }
@@ -64,12 +67,15 @@ class _FarmerSearchScreenState extends ConsumerState<FarmerSearchScreen> {
                   prefixIcon: const Icon(Icons.search),
                 ),
                 keyboardType: TextInputType.number,
-                validator: (v) => (v == null || v.isEmpty) ? l10n.requiredField : null,
+                validator: (v) =>
+                    (v == null || v.isEmpty) ? l10n.requiredField : null,
                 onFieldSubmitted: (_) => _onSearch(),
               ),
               const SizedBox(height: 24),
               ElevatedButton(
-                onPressed: state.status == FarmerSearchStatus.searching ? null : _onSearch,
+                onPressed: state.status == FarmerSearchStatus.searching
+                    ? null
+                    : _onSearch,
                 child: state.status == FarmerSearchStatus.searching
                     ? const CircularProgressIndicator()
                     : Text(l10n.search),

@@ -27,7 +27,9 @@ class LocationRepositoryImpl implements LocationRepository {
     return _getMany(
       '/v1/Users/directorates',
       (json) => Directorate.fromJson(json),
-      queryParameters: governorateId != null ? {'governorateId': governorateId} : null,
+      queryParameters: governorateId != null
+          ? {'governorateId': governorateId}
+          : null,
     );
   }
 
@@ -36,7 +38,9 @@ class LocationRepositoryImpl implements LocationRepository {
     return _getMany(
       '/v1/Location/localities',
       (json) => Locality.fromJson(json),
-      queryParameters: governorateId != null ? {'governorateId': governorateId} : null,
+      queryParameters: governorateId != null
+          ? {'governorateId': governorateId}
+          : null,
     );
   }
 
@@ -57,7 +61,9 @@ class LocationRepositoryImpl implements LocationRepository {
         throw Exception('Failed to load location data.');
       }
 
-      return data.map((json) => fromJson(json as Map<String, dynamic>)).toList();
+      return data
+          .map((json) => fromJson(json as Map<String, dynamic>))
+          .toList();
     } on DioException catch (e) {
       final data = e.response?.data;
       if (data is Map<String, dynamic> && data['errors'] is List) {

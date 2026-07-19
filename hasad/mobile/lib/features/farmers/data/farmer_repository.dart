@@ -57,8 +57,8 @@ class OfflineFirstFarmerRepository implements FarmerRepository {
     if (idNumber != null && idNumber.isNotEmpty) {
       query.where((t) => t.idNumber.contains(idNumber));
     }
-    
-    // Simplification: name search is complex across 8 fields, 
+
+    // Simplification: name search is complex across 8 fields,
     // but we can implement basic contains if needed.
     // For now, let's just use the existing ordering.
 
@@ -70,9 +70,9 @@ class OfflineFirstFarmerRepository implements FarmerRepository {
   @override
   Future<domain.Farmer?> findByIdNumber(String idNumber) async {
     // 1. Search local Drift database first
-    final local = await (_db.select(_db.farmers)
-          ..where((t) => t.idNumber.equals(idNumber)))
-        .getSingleOrNull();
+    final local = await (_db.select(
+      _db.farmers,
+    )..where((t) => t.idNumber.equals(idNumber))).getSingleOrNull();
 
     if (local != null) {
       return _mapToDomain(local);
@@ -80,7 +80,9 @@ class OfflineFirstFarmerRepository implements FarmerRepository {
 
     // 2. If not found locally, check connectivity
     final connectivity = await _connectivity.checkConnectivity();
-    final isOnline = connectivity.isNotEmpty && !connectivity.contains(ConnectivityResult.none);
+    final isOnline =
+        connectivity.isNotEmpty &&
+        !connectivity.contains(ConnectivityResult.none);
 
     if (isOnline) {
       // 3. Search backend
@@ -89,10 +91,10 @@ class OfflineFirstFarmerRepository implements FarmerRepository {
         if (remote != null) {
           // 4. Save/update local database if found remotely
           // We use ClientId (remote.id or remote.clientId) as local 'id'
-          final companion = _mapToCompanion(remote).copyWith(
-            syncStatus: const Value('completed'),
-          );
-          
+          final companion = _mapToCompanion(
+            remote,
+          ).copyWith(syncStatus: const Value('completed'));
+
           await _db.into(_db.farmers).insertOnConflictUpdate(companion);
           return remote;
         }
@@ -170,10 +172,9 @@ class OfflineFirstFarmerRepository implements FarmerRepository {
   @override
   Future<domain.Farmer> createFarmer(domain.Farmer farmer) async {
     final localId = farmer.id.isEmpty ? const Uuid().v4() : farmer.id;
-    final companion = _mapToCompanion(farmer).copyWith(
-      id: Value(localId),
-      syncStatus: const Value('pending'),
-    );
+    final companion = _mapToCompanion(
+      farmer,
+    ).copyWith(id: Value(localId), syncStatus: const Value('pending'));
 
     await _db.into(_db.farmers).insert(companion);
 
@@ -196,8 +197,9 @@ class OfflineFirstFarmerRepository implements FarmerRepository {
       syncStatus: const Value('pending'),
     );
 
-    await (_db.update(_db.farmers)..where((t) => t.id.equals(farmer.id)))
-        .write(companion);
+    await (_db.update(
+      _db.farmers,
+    )..where((t) => t.id.equals(farmer.id))).write(companion);
 
     await _syncService.addToQueue(
       localId: farmer.id,

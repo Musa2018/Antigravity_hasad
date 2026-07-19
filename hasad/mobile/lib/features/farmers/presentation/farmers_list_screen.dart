@@ -63,7 +63,9 @@ class FarmersListScreen extends ConsumerWidget {
           if (result.exists && result.farmer != null) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                content: Text('تم العثور على بيانات المزارع في النظام - الانتقال لصفحة التعديل'),
+                content: Text(
+                  'تم العثور على بيانات المزارع في النظام - الانتقال لصفحة التعديل',
+                ),
                 backgroundColor: Colors.blue,
               ),
             );

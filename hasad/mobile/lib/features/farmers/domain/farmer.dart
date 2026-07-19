@@ -9,7 +9,8 @@ class Farmer with _$Farmer {
   const factory Farmer({
     required String id, // Local ClientId
     String? serverId,
-    @Default('') String clientId, // Redundant but kept for sync contract consistency
+    @Default('')
+    String clientId, // Redundant but kept for sync contract consistency
     required int idTypeId,
     required String idNumber,
     required String firstNameAr,

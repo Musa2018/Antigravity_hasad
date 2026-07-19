@@ -15,6 +15,7 @@ import 'package:mobile/l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 class MockFarmerRepository extends Mock implements FarmerRepository {}
+
 class MockLocationRepository extends Mock implements LocationRepository {}
 
 void main() {
@@ -84,39 +85,54 @@ void main() {
   });
 
   testWidgets('FarmerFormScreen handles Cascading Lookups', (tester) async {
-    final govs = [const Governorate(id: 'g1', nameAr: 'محافظة 1', nameEn: 'Gov 1')];
-    final locs = [const Locality(id: 'l1', nameAr: 'تجمع 1', nameEn: 'Loc 1', governorateId: 'g1')];
+    final govs = [
+      const Governorate(id: 'g1', nameAr: 'محافظة 1', nameEn: 'Gov 1'),
+    ];
+    final locs = [
+      const Locality(
+        id: 'l1',
+        nameAr: 'تجمع 1',
+        nameEn: 'Loc 1',
+        governorateId: 'g1',
+      ),
+    ];
 
-    when(() => mockLocationRepo.getGovernorates()).thenAnswer((_) async => govs);
-    when(() => mockLocationRepo.getLocalities(governorateId: any(named: 'governorateId')))
-        .thenAnswer((_) async => locs);
+    when(
+      () => mockLocationRepo.getGovernorates(),
+    ).thenAnswer((_) async => govs);
+    when(
+      () => mockLocationRepo.getLocalities(
+        governorateId: any(named: 'governorateId'),
+      ),
+    ).thenAnswer((_) async => locs);
 
     await tester.pumpWidget(createWidget(const FarmerFormScreen()));
     await tester.pumpAndSettle();
 
     // Select Governorate
-    final govField = find.ancestor(
-      of: find.text('Governorate'),
-      matching: find.byType(InkWell),
-    ).first;
+    final govField = find
+        .ancestor(of: find.text('Governorate'), matching: find.byType(InkWell))
+        .first;
     await tester.ensureVisible(govField);
     await tester.tap(govField);
     await tester.pumpAndSettle();
-    
+
     await tester.tap(find.text('Gov 1'));
     await tester.pumpAndSettle();
 
     expect(find.text('Gov 1'), findsOneWidget);
 
     // Verify Locality is now available
-    final locField = find.ancestor(
-      of: find.text('Locality/Village'),
-      matching: find.byType(InkWell),
-    ).first;
+    final locField = find
+        .ancestor(
+          of: find.text('Locality/Village'),
+          matching: find.byType(InkWell),
+        )
+        .first;
     await tester.ensureVisible(locField);
     await tester.tap(locField);
     await tester.pumpAndSettle();
-    
+
     await tester.tap(find.text('Loc 1'));
     await tester.pumpAndSettle();
 
@@ -146,14 +162,28 @@ void main() {
       rowVersion: 'v1',
     );
 
-    when(() => mockLocationRepo.getGovernorates()).thenAnswer((_) async => [
-      const Governorate(id: 'g1', nameAr: 'محافظة 1', nameEn: 'Gov 1')
-    ]);
-    when(() => mockLocationRepo.getLocalities(governorateId: any(named: 'governorateId')))
-        .thenAnswer((_) async => [
-      const Locality(id: 'l1', nameAr: 'تجمع 1', nameEn: 'Loc 1', governorateId: 'g1')
-    ]);
-    when(() => mockFarmerRepo.updateFarmer(any())).thenAnswer((_) async => farmer);
+    when(() => mockLocationRepo.getGovernorates()).thenAnswer(
+      (_) async => [
+        const Governorate(id: 'g1', nameAr: 'محافظة 1', nameEn: 'Gov 1'),
+      ],
+    );
+    when(
+      () => mockLocationRepo.getLocalities(
+        governorateId: any(named: 'governorateId'),
+      ),
+    ).thenAnswer(
+      (_) async => [
+        const Locality(
+          id: 'l1',
+          nameAr: 'تجمع 1',
+          nameEn: 'Loc 1',
+          governorateId: 'g1',
+        ),
+      ],
+    );
+    when(
+      () => mockFarmerRepo.updateFarmer(any()),
+    ).thenAnswer((_) async => farmer);
 
     await tester.pumpWidget(createWidget(FarmerFormScreen(farmer: farmer)));
     await tester.pumpAndSettle();
@@ -161,15 +191,15 @@ void main() {
     final saveButton = find.text('Save');
     await tester.ensureVisible(saveButton);
     await tester.tap(saveButton);
-    
+
     // Pump once to start the action
     await tester.pump();
-    
+
     // We expect SnackBar to appear.
     await tester.pump(const Duration(milliseconds: 100));
-    
+
     verify(() => mockFarmerRepo.updateFarmer(any())).called(1);
-    
+
     expect(find.text('Farmer updated successfully'), findsOneWidget);
   });
 }

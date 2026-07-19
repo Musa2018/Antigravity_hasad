@@ -29,7 +29,8 @@ class FarmerIdentityDialog extends ConsumerStatefulWidget {
   }
 
   @override
-  ConsumerState<FarmerIdentityDialog> createState() => _FarmerIdentityDialogState();
+  ConsumerState<FarmerIdentityDialog> createState() =>
+      _FarmerIdentityDialogState();
 }
 
 class _FarmerIdentityDialogState extends ConsumerState<FarmerIdentityDialog> {

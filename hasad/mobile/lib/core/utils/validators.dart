@@ -1,7 +1,9 @@
 class Validators {
   static String formatIdNumber(int idTypeId, String idNumber) {
     idNumber = idNumber.trim();
-    if ((idTypeId == 1 || idTypeId == 2) && idNumber.length < 9 && RegExp(r'^\d+$').hasMatch(idNumber)) {
+    if ((idTypeId == 1 || idTypeId == 2) &&
+        idNumber.length < 9 &&
+        RegExp(r'^\d+$').hasMatch(idNumber)) {
       return idNumber.padLeft(9, '0');
     }
     return idNumber;
@@ -45,11 +47,12 @@ class Validators {
   static bool isAtLeast18(DateTime birthDate) {
     final today = DateTime.now();
     int age = today.year - birthDate.year;
-    
-    if (today.month < birthDate.month || (today.month == birthDate.month && today.day < birthDate.day)) {
+
+    if (today.month < birthDate.month ||
+        (today.month == birthDate.month && today.day < birthDate.day)) {
       age--;
     }
-    
+
     return age >= 18;
   }
 }

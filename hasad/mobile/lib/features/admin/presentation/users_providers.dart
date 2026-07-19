@@ -5,7 +5,8 @@ import 'package:mobile/features/admin/domain/user.dart';
 import 'package:mobile/features/auth/presentation/auth_providers.dart';
 import 'package:mobile/features/location/domain/directorate.dart';
 import 'package:mobile/features/location/domain/governorate.dart';
-import 'package:mobile/features/location/presentation/location_providers.dart' as location;
+import 'package:mobile/features/location/presentation/location_providers.dart'
+    as location;
 import 'package:mobile/shared/domain/paginated_list.dart';
 
 final usersRepositoryProvider = Provider<UsersRepository>((ref) {

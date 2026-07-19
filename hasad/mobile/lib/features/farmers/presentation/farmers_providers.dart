@@ -294,7 +294,10 @@ class FarmerSearchNotifier extends StateNotifier<FarmerSearchState> {
     try {
       final farmer = await _repository.findByIdNumber(idNumber);
       if (farmer != null) {
-        state = FarmerSearchState(status: FarmerSearchStatus.found, farmer: farmer);
+        state = FarmerSearchState(
+          status: FarmerSearchStatus.found,
+          farmer: farmer,
+        );
       } else {
         state = const FarmerSearchState(status: FarmerSearchStatus.notFound);
       }

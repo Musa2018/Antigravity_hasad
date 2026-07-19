@@ -10,7 +10,9 @@ import 'package:mobile/features/farmers/domain/farmer.dart';
 import 'package:mobile/features/farmers/domain/gender.dart';
 
 class MockSyncService extends Mock implements BackgroundSyncService {}
+
 class MockRemoteRepository extends Mock implements FarmerRepository {}
+
 class MockConnectivity extends Mock implements Connectivity {}
 
 void main() {
@@ -60,7 +62,9 @@ void main() {
 
   test('findByIdNumber returns local farmer if found', () async {
     // Insert into local DB
-    await db.into(db.farmers).insert(
+    await db
+        .into(db.farmers)
+        .insert(
           FarmersCompanion.insert(
             id: testFarmer.id,
             idNumber: const Value('123456789'),
@@ -83,30 +87,39 @@ void main() {
     verifyNever(() => mockConnectivity.checkConnectivity());
   });
 
-  test('findByIdNumber fallbacks to remote if not found locally and online', () async {
-    when(() => mockConnectivity.checkConnectivity())
-        .thenAnswer((_) async => [ConnectivityResult.wifi]);
-    when(() => mockRemoteRepository.findByIdNumber('123456789'))
-        .thenAnswer((_) async => testFarmer);
+  test(
+    'findByIdNumber fallbacks to remote if not found locally and online',
+    () async {
+      when(
+        () => mockConnectivity.checkConnectivity(),
+      ).thenAnswer((_) async => [ConnectivityResult.wifi]);
+      when(
+        () => mockRemoteRepository.findByIdNumber('123456789'),
+      ).thenAnswer((_) async => testFarmer);
 
-    final result = await repository.findByIdNumber('123456789');
+      final result = await repository.findByIdNumber('123456789');
 
-    expect(result, isNotNull);
-    expect(result!.idNumber, '123456789');
+      expect(result, isNotNull);
+      expect(result!.idNumber, '123456789');
 
-    // Verify it was saved locally
-    final local = await db.select(db.farmers).get();
-    expect(local.length, 1);
-    expect(local.first.id, testFarmer.id);
-  });
+      // Verify it was saved locally
+      final local = await db.select(db.farmers).get();
+      expect(local.length, 1);
+      expect(local.first.id, testFarmer.id);
+    },
+  );
 
-  test('findByIdNumber returns null if not found locally and offline', () async {
-    when(() => mockConnectivity.checkConnectivity())
-        .thenAnswer((_) async => [ConnectivityResult.none]);
+  test(
+    'findByIdNumber returns null if not found locally and offline',
+    () async {
+      when(
+        () => mockConnectivity.checkConnectivity(),
+      ).thenAnswer((_) async => [ConnectivityResult.none]);
 
-    final result = await repository.findByIdNumber('123456789');
+      final result = await repository.findByIdNumber('123456789');
 
-    expect(result, isNull);
-    verifyNever(() => mockRemoteRepository.findByIdNumber(any()));
-  });
+      expect(result, isNull);
+      verifyNever(() => mockRemoteRepository.findByIdNumber(any()));
+    },
+  );
 }

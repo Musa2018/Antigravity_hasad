@@ -23,7 +23,7 @@ class FarmerFormScreen extends ConsumerStatefulWidget {
 
 class _FarmerFormScreenState extends ConsumerState<FarmerFormScreen> {
   final _formKey = GlobalKey<FormState>();
-  
+
   // Controllers
   late TextEditingController _firstNameArController;
   late TextEditingController _fatherNameArController;
@@ -49,22 +49,30 @@ class _FarmerFormScreenState extends ConsumerState<FarmerFormScreen> {
   void initState() {
     super.initState();
     final f = widget.farmer;
-    
+
     _firstNameArController = TextEditingController(text: f?.firstNameAr);
     _fatherNameArController = TextEditingController(text: f?.fatherNameAr);
-    _grandfatherNameArController = TextEditingController(text: f?.grandfatherNameAr);
+    _grandfatherNameArController = TextEditingController(
+      text: f?.grandfatherNameAr,
+    );
     _familyNameArController = TextEditingController(text: f?.familyNameAr);
-    
+
     _firstNameEnController = TextEditingController(text: f?.firstNameEn);
     _fatherNameEnController = TextEditingController(text: f?.fatherNameEn);
-    _grandfatherNameEnController = TextEditingController(text: f?.grandfatherNameEn);
+    _grandfatherNameEnController = TextEditingController(
+      text: f?.grandfatherNameEn,
+    );
     _familyNameEnController = TextEditingController(text: f?.familyNameEn);
-    
-    _idNumberController = TextEditingController(text: f?.idNumber ?? widget.initialIdNumber);
+
+    _idNumberController = TextEditingController(
+      text: f?.idNumber ?? widget.initialIdNumber,
+    );
     _phoneController = TextEditingController(text: f?.phoneNumber);
-    _familySizeController = TextEditingController(text: f?.familySize.toString() ?? '1');
+    _familySizeController = TextEditingController(
+      text: f?.familySize.toString() ?? '1',
+    );
     _addressController = TextEditingController(text: f?.address);
-    
+
     _birthDate = f?.birthDate;
     _gender = f?.gender ?? Gender.unspecified;
     _idTypeId = f?.idTypeId ?? 1;
@@ -144,7 +152,9 @@ class _FarmerFormScreenState extends ConsumerState<FarmerFormScreen> {
       final message = widget.farmer == null
           ? AppLocalizations.of(context)!.farmerCreatedSuccessfully
           : AppLocalizations.of(context)!.farmerUpdatedSuccessfully;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
       ref.invalidate(farmersListProvider);
       if (widget.farmer != null) {
         ref.invalidate(farmerProvider(widget.farmer!.id));
@@ -181,226 +191,249 @@ class _FarmerFormScreenState extends ConsumerState<FarmerFormScreen> {
                     style: const TextStyle(color: Colors.red),
                   ),
                 ),
-              
-              _buildSection(
-                l10n.identitySection,
-                [
-                  DropdownButtonFormField<int>(
-                    value: _idTypeId,
-                    decoration: InputDecoration(labelText: l10n.idType),
-                    items: [
-                      DropdownMenuItem(value: 1, child: Text(l10n.nationalId)),
-                      DropdownMenuItem(value: 2, child: Text(l10n.jerusalemId)),
-                      DropdownMenuItem(value: 3, child: Text(l10n.passport)),
-                    ],
-                    onChanged: (v) => setState(() => _idTypeId = v ?? 1),
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    controller: _idNumberController,
-                    decoration: InputDecoration(labelText: l10n.idNumber),
+
+              _buildSection(l10n.identitySection, [
+                DropdownButtonFormField<int>(
+                  value: _idTypeId,
+                  decoration: InputDecoration(labelText: l10n.idType),
+                  items: [
+                    DropdownMenuItem(value: 1, child: Text(l10n.nationalId)),
+                    DropdownMenuItem(value: 2, child: Text(l10n.jerusalemId)),
+                    DropdownMenuItem(value: 3, child: Text(l10n.passport)),
+                  ],
+                  onChanged: (v) => setState(() => _idTypeId = v ?? 1),
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _idNumberController,
+                  decoration: InputDecoration(labelText: l10n.idNumber),
+                  validator: (v) {
+                    if (v == null || v.isEmpty) return l10n.requiredField;
+                    final id = v.trim();
+                    switch (_idTypeId) {
+                      case 1:
+                        if (!Validators.isValidPalestinianId(id)) {
+                          return l10n.invalidPalestinianId;
+                        }
+                        break;
+                      case 2:
+                        if (!Validators.isNumeric(id)) {
+                          return l10n.mustBeNumeric;
+                        }
+                        break;
+                      case 3:
+                        if (!Validators.isAlphanumeric(id)) {
+                          return l10n.mustBeAlphanumeric;
+                        }
+                        break;
+                    }
+                    return null;
+                  },
+                ),
+              ]),
+
+              _buildSection(l10n.arabicNameSection, [
+                TextFormField(
+                  controller: _firstNameArController,
+                  decoration: InputDecoration(labelText: l10n.firstName),
+                  validator: (v) =>
+                      (v == null || v.isEmpty) ? l10n.requiredField : null,
+                ),
+                const SizedBox(height: 8),
+                TextFormField(
+                  controller: _fatherNameArController,
+                  decoration: InputDecoration(labelText: l10n.secondName),
+                  validator: (v) =>
+                      (v == null || v.isEmpty) ? l10n.requiredField : null,
+                ),
+                const SizedBox(height: 8),
+                TextFormField(
+                  controller: _grandfatherNameArController,
+                  decoration: InputDecoration(labelText: l10n.thirdName),
+                  validator: (v) =>
+                      (v == null || v.isEmpty) ? l10n.requiredField : null,
+                ),
+                const SizedBox(height: 8),
+                TextFormField(
+                  controller: _familyNameArController,
+                  decoration: InputDecoration(labelText: l10n.fourthName),
+                  validator: (v) =>
+                      (v == null || v.isEmpty) ? l10n.requiredField : null,
+                ),
+              ]),
+
+              _buildSection(l10n.englishNameSection, [
+                TextFormField(
+                  controller: _firstNameEnController,
+                  decoration: InputDecoration(labelText: l10n.firstName),
+                  validator: (v) =>
+                      (v == null || v.isEmpty) ? l10n.requiredField : null,
+                ),
+                const SizedBox(height: 8),
+                TextFormField(
+                  controller: _fatherNameEnController,
+                  decoration: InputDecoration(labelText: l10n.secondName),
+                  validator: (v) =>
+                      (v == null || v.isEmpty) ? l10n.requiredField : null,
+                ),
+                const SizedBox(height: 8),
+                TextFormField(
+                  controller: _grandfatherNameEnController,
+                  decoration: InputDecoration(labelText: l10n.thirdName),
+                  validator: (v) =>
+                      (v == null || v.isEmpty) ? l10n.requiredField : null,
+                ),
+                const SizedBox(height: 8),
+                TextFormField(
+                  controller: _familyNameEnController,
+                  decoration: InputDecoration(labelText: l10n.fourthName),
+                  validator: (v) =>
+                      (v == null || v.isEmpty) ? l10n.requiredField : null,
+                ),
+              ]),
+
+              _buildSection(l10n.demographicsSection, [
+                InkWell(
+                  onTap: _selectDate,
+                  child: FormField<DateTime>(
+                    initialValue: _birthDate,
                     validator: (v) {
-                      if (v == null || v.isEmpty) return l10n.requiredField;
-                      final id = v.trim();
-                      switch (_idTypeId) {
-                        case 1:
-                          if (!Validators.isValidPalestinianId(id)) {
-                            return l10n.invalidPalestinianId;
-                          }
-                          break;
-                        case 2:
-                          if (!Validators.isNumeric(id)) {
-                            return l10n.mustBeNumeric;
-                          }
-                          break;
-                        case 3:
-                          if (!Validators.isAlphanumeric(id)) {
-                            return l10n.mustBeAlphanumeric;
-                          }
-                          break;
+                      if (_birthDate == null) return l10n.requiredField;
+                      if (!Validators.isAtLeast18(_birthDate!)) {
+                        return l10n.mustBe18;
+                      }
+                      if (_birthDate!.isAfter(DateTime.now())) {
+                        return l10n.cannotBeInFuture;
                       }
                       return null;
                     },
-                  ),
-                ],
-              ),
-
-              _buildSection(
-                l10n.arabicNameSection,
-                [
-                  TextFormField(
-                    controller: _firstNameArController,
-                    decoration: InputDecoration(labelText: l10n.firstName),
-                    validator: (v) => (v == null || v.isEmpty) ? l10n.requiredField : null,
-                  ),
-                  const SizedBox(height: 8),
-                  TextFormField(
-                    controller: _fatherNameArController,
-                    decoration: InputDecoration(labelText: l10n.secondName),
-                    validator: (v) => (v == null || v.isEmpty) ? l10n.requiredField : null,
-                  ),
-                  const SizedBox(height: 8),
-                  TextFormField(
-                    controller: _grandfatherNameArController,
-                    decoration: InputDecoration(labelText: l10n.thirdName),
-                    validator: (v) => (v == null || v.isEmpty) ? l10n.requiredField : null,
-                  ),
-                  const SizedBox(height: 8),
-                  TextFormField(
-                    controller: _familyNameArController,
-                    decoration: InputDecoration(labelText: l10n.fourthName),
-                    validator: (v) => (v == null || v.isEmpty) ? l10n.requiredField : null,
-                  ),
-                ],
-              ),
-
-              _buildSection(
-                l10n.englishNameSection,
-                [
-                  TextFormField(
-                    controller: _firstNameEnController,
-                    decoration: InputDecoration(labelText: l10n.firstName),
-                    validator: (v) => (v == null || v.isEmpty) ? l10n.requiredField : null,
-                  ),
-                  const SizedBox(height: 8),
-                  TextFormField(
-                    controller: _fatherNameEnController,
-                    decoration: InputDecoration(labelText: l10n.secondName),
-                    validator: (v) => (v == null || v.isEmpty) ? l10n.requiredField : null,
-                  ),
-                  const SizedBox(height: 8),
-                  TextFormField(
-                    controller: _grandfatherNameEnController,
-                    decoration: InputDecoration(labelText: l10n.thirdName),
-                    validator: (v) => (v == null || v.isEmpty) ? l10n.requiredField : null,
-                  ),
-                  const SizedBox(height: 8),
-                  TextFormField(
-                    controller: _familyNameEnController,
-                    decoration: InputDecoration(labelText: l10n.fourthName),
-                    validator: (v) => (v == null || v.isEmpty) ? l10n.requiredField : null,
-                  ),
-                ],
-              ),
-
-              _buildSection(
-                l10n.demographicsSection,
-                [
-                  InkWell(
-                    onTap: _selectDate,
-                    child: FormField<DateTime>(
-                      initialValue: _birthDate,
-                      validator: (v) {
-                        if (_birthDate == null) return l10n.requiredField;
-                        if (!Validators.isAtLeast18(_birthDate!)) {
-                          return l10n.mustBe18;
-                        }
-                        if (_birthDate!.isAfter(DateTime.now())) {
-                          return l10n.cannotBeInFuture;
-                        }
-                        return null;
-                      },
-                      builder: (state) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            InputDecorator(
-                              decoration: InputDecoration(
-                                labelText: l10n.dateOfBirth,
-                                suffixIcon: const Icon(Icons.calendar_today),
-                                errorText: state.errorText,
-                              ),
-                              child: Text(
-                                _birthDate == null 
-                                    ? l10n.selectDate 
-                                    : DateFormat.yMd(Localizations.localeOf(context).toString()).format(_birthDate!),
-                              ),
+                    builder: (state) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          InputDecorator(
+                            decoration: InputDecoration(
+                              labelText: l10n.dateOfBirth,
+                              suffixIcon: const Icon(Icons.calendar_today),
+                              errorText: state.errorText,
                             ),
-                          ],
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  DropdownButtonFormField<Gender>(
-                    value: _gender,
-                    decoration: InputDecoration(labelText: l10n.gender),
-                    items: [
-                      DropdownMenuItem(value: Gender.unspecified, child: Text(l10n.unspecified)),
-                      DropdownMenuItem(value: Gender.male, child: Text(l10n.male)),
-                      DropdownMenuItem(value: Gender.female, child: Text(l10n.female)),
-                    ],
-                    onChanged: (v) => setState(() => _gender = v ?? Gender.unspecified),
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    controller: _phoneController,
-                    decoration: InputDecoration(labelText: l10n.mobileNumber),
-                    keyboardType: TextInputType.phone,
-                    validator: (v) => (v == null || v.isEmpty) ? l10n.requiredField : null,
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    controller: _familySizeController,
-                    decoration: InputDecoration(labelText: l10n.familySize),
-                    keyboardType: TextInputType.number,
-                    validator: (v) {
-                      if (v == null || v.isEmpty) return l10n.requiredField;
-                      if (int.tryParse(v) == null) return l10n.invalidFamilySize;
-                      return null;
+                            child: Text(
+                              _birthDate == null
+                                  ? l10n.selectDate
+                                  : DateFormat.yMd(
+                                      Localizations.localeOf(
+                                        context,
+                                      ).toString(),
+                                    ).format(_birthDate!),
+                            ),
+                          ),
+                        ],
+                      );
                     },
                   ),
-                ],
-              ),
-
-              _buildSection(
-                l10n.locationSection,
-                [
-                  govAsync.when(
-                    data: (govs) => SearchableLookupField<Governorate>(
-                      label: l10n.governorate,
-                      items: govs,
-                      itemLabel: (g) => Localizations.localeOf(context).languageCode == 'ar' ? g.nameAr : g.nameEn,
-                      value: govs.where((g) => g.id == _selectedGovernorateId).firstOrNull,
-                      onChanged: (v) => setState(() {
-                        _selectedGovernorateId = v?.id;
-                        _selectedLocalityId = null;
-                      }),
-                      validator: (v) => v == null ? l10n.requiredField : null,
+                ),
+                const SizedBox(height: 16),
+                DropdownButtonFormField<Gender>(
+                  value: _gender,
+                  decoration: InputDecoration(labelText: l10n.gender),
+                  items: [
+                    DropdownMenuItem(
+                      value: Gender.unspecified,
+                      child: Text(l10n.unspecified),
                     ),
-                    loading: () => const LinearProgressIndicator(),
-                    error: (e, _) => Text(e.toString()),
+                    DropdownMenuItem(
+                      value: Gender.male,
+                      child: Text(l10n.male),
+                    ),
+                    DropdownMenuItem(
+                      value: Gender.female,
+                      child: Text(l10n.female),
+                    ),
+                  ],
+                  onChanged: (v) =>
+                      setState(() => _gender = v ?? Gender.unspecified),
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _phoneController,
+                  decoration: InputDecoration(labelText: l10n.mobileNumber),
+                  keyboardType: TextInputType.phone,
+                  validator: (v) =>
+                      (v == null || v.isEmpty) ? l10n.requiredField : null,
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _familySizeController,
+                  decoration: InputDecoration(labelText: l10n.familySize),
+                  keyboardType: TextInputType.number,
+                  validator: (v) {
+                    if (v == null || v.isEmpty) return l10n.requiredField;
+                    if (int.tryParse(v) == null) return l10n.invalidFamilySize;
+                    return null;
+                  },
+                ),
+              ]),
+
+              _buildSection(l10n.locationSection, [
+                govAsync.when(
+                  data: (govs) => SearchableLookupField<Governorate>(
+                    label: l10n.governorate,
+                    items: govs,
+                    itemLabel: (g) =>
+                        Localizations.localeOf(context).languageCode == 'ar'
+                        ? g.nameAr
+                        : g.nameEn,
+                    value: govs
+                        .where((g) => g.id == _selectedGovernorateId)
+                        .firstOrNull,
+                    onChanged: (v) => setState(() {
+                      _selectedGovernorateId = v?.id;
+                      _selectedLocalityId = null;
+                    }),
+                    validator: (v) => v == null ? l10n.requiredField : null,
                   ),
-                  const SizedBox(height: 16),
-                  _selectedGovernorateId == null
-                      ? InputDecorator(
-                          decoration: InputDecoration(labelText: l10n.village),
-                          child: Text(l10n.governorate),
-                        )
-                      : locAsync.when(
-                          data: (locs) => SearchableLookupField<Locality>(
-                            label: l10n.village,
-                            items: locs,
-                            itemLabel: (d) => Localizations.localeOf(context).languageCode == 'ar' ? d.nameAr : d.nameEn,
-                            value: locs.where((d) => d.id == _selectedLocalityId).firstOrNull,
-                            onChanged: (v) => setState(() => _selectedLocalityId = v?.id),
-                            validator: (v) => v == null ? l10n.requiredField : null,
-                          ),
-                          loading: () => const LinearProgressIndicator(),
-                          error: (e, _) => Text(e.toString()),
+                  loading: () => const LinearProgressIndicator(),
+                  error: (e, _) => Text(e.toString()),
+                ),
+                const SizedBox(height: 16),
+                _selectedGovernorateId == null
+                    ? InputDecorator(
+                        decoration: InputDecoration(labelText: l10n.village),
+                        child: Text(l10n.governorate),
+                      )
+                    : locAsync.when(
+                        data: (locs) => SearchableLookupField<Locality>(
+                          label: l10n.village,
+                          items: locs,
+                          itemLabel: (d) =>
+                              Localizations.localeOf(context).languageCode ==
+                                  'ar'
+                              ? d.nameAr
+                              : d.nameEn,
+                          value: locs
+                              .where((d) => d.id == _selectedLocalityId)
+                              .firstOrNull,
+                          onChanged: (v) =>
+                              setState(() => _selectedLocalityId = v?.id),
+                          validator: (v) =>
+                              v == null ? l10n.requiredField : null,
                         ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    controller: _addressController,
-                    decoration: InputDecoration(labelText: l10n.address),
-                  ),
-                ],
-              ),
+                        loading: () => const LinearProgressIndicator(),
+                        error: (e, _) => Text(e.toString()),
+                      ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _addressController,
+                  decoration: InputDecoration(labelText: l10n.address),
+                ),
+              ]),
 
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: state.isLoading ? null : _save,
-                style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(16)),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.all(16),
+                ),
                 child: state.isLoading
                     ? const CircularProgressIndicator()
                     : Text(l10n.save, style: const TextStyle(fontSize: 18)),

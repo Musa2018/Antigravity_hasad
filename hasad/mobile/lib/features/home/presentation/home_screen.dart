@@ -15,9 +15,17 @@ class HomeScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final session = ref.watch(authProvider).session;
 
-    final canAccessFarmers = session?.roles.any(
-          (r) => const ['SuperAdmin', 'Administrator', 'AgriculturalEngineer', 'FieldSurveyor', 'ReadOnly'].contains(r),
-        ) ?? true;
+    final canAccessFarmers =
+        session?.roles.any(
+          (r) => const [
+            'SuperAdmin',
+            'Administrator',
+            'AgriculturalEngineer',
+            'FieldSurveyor',
+            'ReadOnly',
+          ].contains(r),
+        ) ??
+        true;
 
     return Scaffold(
       appBar: AppBar(

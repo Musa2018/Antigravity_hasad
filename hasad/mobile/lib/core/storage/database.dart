@@ -12,32 +12,47 @@ class Farmers extends Table {
   TextColumn get id => text()(); // local UUID (ClientId)
   TextColumn get serverId => text().nullable()(); // Authority ID from server
   IntColumn get idTypeId => integer().withDefault(const Constant(1))();
-  TextColumn get idNumber => text().withLength(max: 20).withDefault(const Constant(''))();
-  
+  TextColumn get idNumber =>
+      text().withLength(max: 20).withDefault(const Constant(''))();
+
   // Names
-  TextColumn get firstNameAr => text().withLength(max: 50).withDefault(const Constant(''))();
-  TextColumn get fatherNameAr => text().withLength(max: 50).withDefault(const Constant(''))();
-  TextColumn get grandfatherNameAr => text().withLength(max: 50).withDefault(const Constant(''))();
-  TextColumn get familyNameAr => text().withLength(max: 50).withDefault(const Constant(''))();
-  
-  TextColumn get firstNameEn => text().withLength(max: 50).withDefault(const Constant(''))();
-  TextColumn get fatherNameEn => text().withLength(max: 50).withDefault(const Constant(''))();
-  TextColumn get grandfatherNameEn => text().withLength(max: 50).withDefault(const Constant(''))();
-  TextColumn get familyNameEn => text().withLength(max: 50).withDefault(const Constant(''))();
+  TextColumn get firstNameAr =>
+      text().withLength(max: 50).withDefault(const Constant(''))();
+  TextColumn get fatherNameAr =>
+      text().withLength(max: 50).withDefault(const Constant(''))();
+  TextColumn get grandfatherNameAr =>
+      text().withLength(max: 50).withDefault(const Constant(''))();
+  TextColumn get familyNameAr =>
+      text().withLength(max: 50).withDefault(const Constant(''))();
+
+  TextColumn get firstNameEn =>
+      text().withLength(max: 50).withDefault(const Constant(''))();
+  TextColumn get fatherNameEn =>
+      text().withLength(max: 50).withDefault(const Constant(''))();
+  TextColumn get grandfatherNameEn =>
+      text().withLength(max: 50).withDefault(const Constant(''))();
+  TextColumn get familyNameEn =>
+      text().withLength(max: 50).withDefault(const Constant(''))();
 
   DateTimeColumn get birthDate => dateTime().nullable()();
   IntColumn get gender => integer().withDefault(const Constant(0))();
-  TextColumn get phoneNumber => text().withLength(max: 20).withDefault(const Constant(''))();
+  TextColumn get phoneNumber =>
+      text().withLength(max: 20).withDefault(const Constant(''))();
   IntColumn get familySize => integer().withDefault(const Constant(1))();
 
-  TextColumn get governorateId => text().withLength(max: 50).withDefault(const Constant(''))();
-  TextColumn get localityId => text().withLength(max: 50).withDefault(const Constant(''))();
-  TextColumn get address => text().withLength(max: 500).withDefault(const Constant(''))();
+  TextColumn get governorateId =>
+      text().withLength(max: 50).withDefault(const Constant(''))();
+  TextColumn get localityId =>
+      text().withLength(max: 50).withDefault(const Constant(''))();
+  TextColumn get address =>
+      text().withLength(max: 500).withDefault(const Constant(''))();
 
   // Deprecated field - kept temporarily for migration safety if needed, or we can use onUpgrade to drop/ignore.
   // Actually, standard Drift migration adding columns is safer.
-  TextColumn get name => text().withLength(max: 200).withDefault(const Constant(''))();
-  TextColumn get nationalId => text().withLength(max: 20).withDefault(const Constant(''))();
+  TextColumn get name =>
+      text().withLength(max: 200).withDefault(const Constant(''))();
+  TextColumn get nationalId =>
+      text().withLength(max: 20).withDefault(const Constant(''))();
 
   // Optimistic concurrency token
   TextColumn get rowVersion => text().withDefault(const Constant(''))();

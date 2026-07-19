@@ -32,8 +32,11 @@ class FarmerDetailsScreen extends ConsumerWidget {
       ),
       body: farmerAsync.when(
         data: (latestFarmer) => _FarmerDetailsBody(farmer: latestFarmer),
-        loading: () => _FarmerDetailsBody(farmer: farmer), // Show initial data while loading
-        error: (error, stack) => _FarmerDetailsBody(farmer: farmer), // Fallback to passed data
+        loading: () => _FarmerDetailsBody(
+          farmer: farmer,
+        ), // Show initial data while loading
+        error: (error, stack) =>
+            _FarmerDetailsBody(farmer: farmer), // Fallback to passed data
       ),
     );
   }
@@ -58,18 +61,20 @@ class _FarmerDetailsBody extends StatelessWidget {
         children: [
           _SyncStatusBadge(status: farmer.syncStatus),
           const SizedBox(height: 16),
-          
+
           _Section(
             title: l10n.identitySection,
             children: [
               _InfoRow(
                 label: l10n.idType,
-                value: farmer.idTypeId == 1 ? l10n.nationalId : farmer.idTypeId.toString(),
+                value: farmer.idTypeId == 1
+                    ? l10n.nationalId
+                    : farmer.idTypeId.toString(),
               ),
               _InfoRow(label: l10n.idNumber, value: farmer.idNumber),
             ],
           ),
-          
+
           _Section(
             title: l10n.arabicNameSection,
             children: [
@@ -79,7 +84,7 @@ class _FarmerDetailsBody extends StatelessWidget {
               _InfoRow(label: l10n.fourthName, value: farmer.familyNameAr),
             ],
           ),
-          
+
           _Section(
             title: l10n.englishNameSection,
             children: [
@@ -89,7 +94,7 @@ class _FarmerDetailsBody extends StatelessWidget {
               _InfoRow(label: l10n.fourthName, value: farmer.familyNameEn),
             ],
           ),
-          
+
           _Section(
             title: l10n.demographicsSection,
             children: [
@@ -108,7 +113,7 @@ class _FarmerDetailsBody extends StatelessWidget {
               ),
             ],
           ),
-          
+
           _Section(
             title: l10n.locationSection,
             children: [
@@ -117,7 +122,7 @@ class _FarmerDetailsBody extends StatelessWidget {
               _InfoRow(label: l10n.address, value: farmer.address),
             ],
           ),
-          
+
           _Section(
             title: l10n.auditSection,
             children: [
@@ -133,7 +138,7 @@ class _FarmerDetailsBody extends StatelessWidget {
                 ),
             ],
           ),
-          
+
           const Divider(height: 32),
           SizedBox(
             width: double.infinity,
@@ -209,9 +214,9 @@ class _InfoRow extends StatelessWidget {
             flex: 2,
             child: Text(
               label,
-              style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                color: Colors.grey[600],
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.labelLarge?.copyWith(color: Colors.grey[600]),
             ),
           ),
           Expanded(
