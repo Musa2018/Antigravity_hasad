@@ -34,8 +34,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     /// <summary>Registered farmers.</summary>
     public DbSet<Farmer> Farmers => Set<Farmer>();
 
-   /// <summary>Types of identification for farmers.</summary>
-   public DbSet<IdType> IdTypes => Set<IdType>();
+    /// <summary>Types of identification for farmers.</summary>
+    public DbSet<IdType> IdTypes => Set<IdType>();
 
     /// <summary>Registered farms.</summary>
     public DbSet<Farm> Farms => Set<Farm>();
@@ -73,19 +73,19 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
         });
 
         // --- 1. إعدادات جدول أنواع الهويات وحقن البيانات الأساسية ---
-                builder.Entity<IdType>(entity =>
-                {
-                    entity.HasKey(e => e.Id);
-                    entity.Property(e => e.NameAr).IsRequired().HasMaxLength(50);
-                    entity.Property(e => e.NameEn).IsRequired().HasMaxLength(50);
+        builder.Entity<IdType>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.NameAr).IsRequired().HasMaxLength(50);
+            entity.Property(e => e.NameEn).IsRequired().HasMaxLength(50);
 
-                    // حقن البيانات (Seed Data) ليتم إنشاؤها فوراً مع التهجير
-                    entity.HasData(
-                        new IdType { Id = 1, NameAr = "هوية فلسطينية", NameEn = "Palestinian ID" },
-                        new IdType { Id = 2, NameAr = "هوية القدس", NameEn = "Jerusalem ID" },
-                        new IdType { Id = 3, NameAr = "جواز سفر", NameEn = "Passport" }
-                    );
-                });
+            // حقن البيانات (Seed Data) ليتم إنشاؤها فوراً مع التهجير
+            entity.HasData(
+                new IdType { Id = 1, NameAr = "هوية فلسطينية", NameEn = "Palestinian ID" },
+                new IdType { Id = 2, NameAr = "هوية القدس", NameEn = "Jerusalem ID" },
+                new IdType { Id = 3, NameAr = "جواز سفر", NameEn = "Passport" }
+            );
+        });
 
 
 
