@@ -1,0 +1,47 @@
+name: .NET CI
+
+on: [push, pull_request]
+
+concurrency:
+  group: dotnet-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.422'
+          cache: true
+          cache-dependency-path: hasad/backend/**/*.csproj
+
+      - name: Restore dependencies
+        working-directory: hasad/backend
+        run: dotnet restore Hasad.sln
+
+      - name: Verify formatting
+        working-directory: hasad/backend
+        run: dotnet format Hasad.sln --verify-no-changes --verbosity diagnostic
+
+      - name: Build
+        working-directory: hasad/backend
+        run: dotnet build Hasad.sln --no-restore --configuration Release -p:ContinuousIntegrationBuild=true
+
+      - name: Test
+        working-directory: hasad/backend
+        run: >
+          dotnet test Hasad.sln --no-build --configuration Release
+          --logger trx --results-directory TestResults
+          --collect:"XPlat Code Coverage"
+
+      - name: Upload test results and coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dotnet-test-results
+          path: hasad/backend/TestResults
+          retention-days: 14

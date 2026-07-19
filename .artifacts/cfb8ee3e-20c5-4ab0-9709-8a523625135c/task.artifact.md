@@ -1,0 +1,18 @@
+- [x] Verify `farmers` branch
+- [x] Implement Repository Search Logic
+    - [x] Update `FarmerRepository` interface
+    - [x] Update `RemoteFarmerRepository.getFarmers` with `idNumber` support
+    - [x] Implement `OfflineFirstFarmerRepository.findByIdNumber`
+- [x] Implement State Management
+    - [x] Add `FarmerSearchNotifier` and provider in `farmers_providers.dart`
+- [x] Implement UI and Navigation
+    - [x] Create `FarmerSearchScreen`
+    - [x] Create placeholder `FarmerDetailsScreen`
+    - [x] Update `AppRoutes` and `GoRouter` in `app_router.dart`
+    - [x] Update `FarmersListScreen` entry point
+- [x] Verification
+    - [x] Run `flutter analyze`
+    - [x] Run search workflow tests
+- [x] Git Operations
+    - [x] Commit and push to `farmers` branch
+- [x] Final Report

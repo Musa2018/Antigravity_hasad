@@ -1,0 +1,16 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  Hasad.Domain -> /app/hasad/backend/Hasad.Domain/bin/Debug/net8.0/Hasad.Domain.dll
+  Hasad.Application -> /app/hasad/backend/Hasad.Application/bin/Debug/net8.0/Hasad.Application.dll
+  Hasad.Infrastructure -> /app/hasad/backend/Hasad.Infrastructure/bin/Debug/net8.0/Hasad.Infrastructure.dll
+/app/hasad/backend/Hasad.Api/Program.cs(5,18): error CS1061: 'IServiceCollection' does not contain a definition for 'AddOpenApi' and no accessible extension method 'AddOpenApi' accepting a first argument of type 'IServiceCollection' could be found (are you missing a using directive or an assembly reference?) [/app/hasad/backend/Hasad.Api/Hasad.Api.csproj]
+/app/hasad/backend/Hasad.Api/Program.cs(12,9): error CS1061: 'WebApplication' does not contain a definition for 'MapOpenApi' and no accessible extension method 'MapOpenApi' accepting a first argument of type 'WebApplication' could be found (are you missing a using directive or an assembly reference?) [/app/hasad/backend/Hasad.Api/Hasad.Api.csproj]
+
+Build FAILED.
+
+/app/hasad/backend/Hasad.Api/Program.cs(5,18): error CS1061: 'IServiceCollection' does not contain a definition for 'AddOpenApi' and no accessible extension method 'AddOpenApi' accepting a first argument of type 'IServiceCollection' could be found (are you missing a using directive or an assembly reference?) [/app/hasad/backend/Hasad.Api/Hasad.Api.csproj]
+/app/hasad/backend/Hasad.Api/Program.cs(12,9): error CS1061: 'WebApplication' does not contain a definition for 'MapOpenApi' and no accessible extension method 'MapOpenApi' accepting a first argument of type 'WebApplication' could be found (are you missing a using directive or an assembly reference?) [/app/hasad/backend/Hasad.Api/Hasad.Api.csproj]
+    0 Warning(s)
+    2 Error(s)
+
+Time Elapsed 00:00:02.62

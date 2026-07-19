@@ -1,0 +1,13 @@
+- [ ] Verify Root Cause (Investigation)
+- [ ] Backend Implementation (Geographic Seeding)
+    - [ ] Update `DbInitializer.cs` with official Palestinian geographic dataset
+    - [ ] Update `Program.cs` to call geographic seeding
+- [ ] Flutter Implementation (UI Hardening)
+    - [ ] Update `CreateUserScreen.dart` with loading/error/empty states
+    - [ ] Update `UsersRepository` / Providers if necessary
+- [ ] Verification & Testing
+    - [ ] Run backend tests (`dotnet test`)
+    - [ ] Run Flutter tests (`flutter test`)
+    - [ ] Run `flutter analyze`
+- [ ] Finalize & GitHub
+    - [ ] Git commit and push
