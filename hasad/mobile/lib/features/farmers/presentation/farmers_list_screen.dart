@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobile/core/router/app_router.dart';
-import 'package:mobile/features/farmers/domain/farmer.dart';
-import 'package:mobile/features/farmers/domain/gender.dart';
 import 'package:mobile/features/farmers/presentation/farmer_identity_dialog.dart';
 import 'package:mobile/features/farmers/presentation/farmers_providers.dart';
 import 'package:mobile/l10n/app_localizations.dart';
