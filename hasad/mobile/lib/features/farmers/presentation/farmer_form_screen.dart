@@ -194,7 +194,7 @@ class _FarmerFormScreenState extends ConsumerState<FarmerFormScreen> {
 
               _buildSection(l10n.identitySection, [
                 DropdownButtonFormField<int>(
-                  value: _idTypeId,
+                  initialValue: _idTypeId,
                   decoration: InputDecoration(labelText: l10n.idType),
                   items: [
                     DropdownMenuItem(value: 1, child: Text(l10n.nationalId)),
@@ -334,7 +334,7 @@ class _FarmerFormScreenState extends ConsumerState<FarmerFormScreen> {
                 ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<Gender>(
-                  value: _gender,
+                  initialValue: _gender,
                   decoration: InputDecoration(labelText: l10n.gender),
                   items: [
                     DropdownMenuItem(

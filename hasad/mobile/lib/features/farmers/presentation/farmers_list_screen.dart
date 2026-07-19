@@ -71,27 +71,7 @@ class FarmersListScreen extends ConsumerWidget {
             );
             context.push(AppRoutes.editFarmer, extra: result.farmer);
           } else {
-            final newFarmerWithId = Farmer(
-              id: '',
-              idTypeId: 1,
-              idNumber: result.idNumber,
-              firstNameAr: '',
-              fatherNameAr: '',
-              grandfatherNameAr: '',
-              familyNameAr: '',
-              firstNameEn: '',
-              fatherNameEn: '',
-              grandfatherNameEn: '',
-              familyNameEn: '',
-              birthDate: DateTime.now(),
-              gender: Gender.unspecified,
-              phoneNumber: '',
-              familySize: 1,
-              governorateId: '',
-              localityId: '',
-              address: '',
-            );
-            context.push(AppRoutes.createFarmer, extra: newFarmerWithId);
+            context.push(AppRoutes.addFarmer, extra: result.idNumber);
           }
         },
         label: const Text('إضافة جديد'),

@@ -101,7 +101,7 @@ class _FarmerIdentityDialogState extends ConsumerState<FarmerIdentityDialog> {
         key: _formKey,
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
               'يرجى إدخال رقم هوية المزارع للتحقق المسبق في النظام قبل إضافة بيانات جديدة.',
