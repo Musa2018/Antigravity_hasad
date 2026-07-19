@@ -4,6 +4,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mobile/features/admin/data/users_repository.dart';
 import 'package:mobile/features/location/data/location_repository.dart';
+import 'package:mobile/features/location/domain/directorate.dart';
+import 'package:mobile/features/location/domain/governorate.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockLocationRepository extends Mock implements LocationRepository {}
@@ -63,12 +65,11 @@ void main() {
     });
 
     test('getGovernorates returns list of governorates on success', () async {
-      final repository = _repositoryFor({
-        'succeeded': true,
-        'data': [
-          {'id': 'g1', 'nameAr': 'غزة', 'nameEn': 'Gaza'},
-        ],
-      });
+      final mockLocRepo = MockLocationRepository();
+      when(() => mockLocRepo.getGovernorates()).thenAnswer(
+        (_) async => [Governorate(id: 'g1', nameAr: 'غزة', nameEn: 'Gaza')],
+      );
+      final repository = _repositoryFor({}, locationRepo: mockLocRepo);
 
       final govs = await repository.getGovernorates();
 
@@ -77,12 +78,18 @@ void main() {
     });
 
     test('getDirectorates returns filtered list on success', () async {
-      final repository = _repositoryFor({
-        'succeeded': true,
-        'data': [
-          {'id': 'd1', 'nameAr': 'د1', 'nameEn': 'D1', 'governorateId': 'g1'},
+      final mockLocRepo = MockLocationRepository();
+      when(() => mockLocRepo.getDirectorates(governorateId: 'g1')).thenAnswer(
+        (_) async => [
+          Directorate(
+            id: 'd1',
+            nameAr: 'د1',
+            nameEn: 'D1',
+            governorateId: 'g1',
+          ),
         ],
-      });
+      );
+      final repository = _repositoryFor({}, locationRepo: mockLocRepo);
 
       final dirs = await repository.getDirectorates(governorateId: 'g1');
 

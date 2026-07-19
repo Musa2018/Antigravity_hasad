@@ -8,9 +8,14 @@ import 'package:mobile/features/admin/presentation/users_providers.dart';
 import 'package:mobile/features/auth/data/auth_repository.dart';
 import 'package:mobile/features/auth/domain/auth_session.dart';
 import 'package:mobile/features/auth/presentation/auth_providers.dart';
+import 'package:mobile/features/location/data/location_repository.dart';
+import 'package:mobile/features/location/presentation/location_providers.dart'
+    as location;
 import 'package:mocktail/mocktail.dart';
 
 class MockUsersRepository extends Mock implements UsersRepository {}
+
+class MockLocationRepository extends Mock implements LocationRepository {}
 
 class MockAuthRepository extends Mock implements AuthRepository {}
 
@@ -34,9 +39,11 @@ class FakeAuthNotifier extends AuthNotifier {
 
 void main() {
   late MockUsersRepository mockRepository;
+  late MockLocationRepository mockLocationRepo;
 
   setUp(() {
     mockRepository = MockUsersRepository();
+    mockLocationRepo = MockLocationRepository();
   });
 
   ProviderContainer createContainer({
@@ -57,6 +64,7 @@ void main() {
     final container = ProviderContainer(
       overrides: [
         usersRepositoryProvider.overrideWithValue(mockRepository),
+        location.locationRepositoryProvider.overrideWithValue(mockLocationRepo),
         authProvider.overrideWith(
           (ref) => FakeAuthNotifier(status: status, session: session),
         ),
@@ -107,13 +115,13 @@ void main() {
     test('directoratesProvider calls repository with correct ID', () async {
       final container = createContainer();
       when(
-        () => mockRepository.getDirectorates(governorateId: 'g1'),
+        () => mockLocationRepo.getDirectorates(governorateId: 'g1'),
       ).thenAnswer((_) async => []);
 
       await container.read(directoratesProvider('g1').future);
 
       verify(
-        () => mockRepository.getDirectorates(governorateId: 'g1'),
+        () => mockLocationRepo.getDirectorates(governorateId: 'g1'),
       ).called(1);
     });
 
